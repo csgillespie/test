@@ -1,0 +1,15 @@
+# This is a basic workflow to help you get started with Actions
+
+name: roxygen
+
+
+on: [push]
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    container: rocker/verse
+    steps:
+      - uses: actions/checkout@v1
+      - run: Rscript -e "remotes::install_github('jumpingrivers/inteRgrate')"
+      - run: Rscript -e "inteRgrate::check_via_env(default = TRUE)"
+ 
