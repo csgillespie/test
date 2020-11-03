@@ -24,11 +24,10 @@ jobs:
 
       - name: Dependences
         run: |
-          echo $R_LIBS_USER
-          echo ${{ env.R_LIBS_USER }}
           remotes::install_deps(dependencies = TRUE)
           install.packages(c("drat", "cli"))
         shell: Rscript {0}
+
       - name: build    
         run: R CMD build .
  
