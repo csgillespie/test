@@ -7,6 +7,13 @@ jobs:
     container: rocker/verse
     steps:
       - uses: actions/checkout@v1
+
+      - name: setup
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git config --global push.default simple
+     
       - name: Dependences
         run: |
           remotes::install_deps(dependencies = TRUE)
@@ -17,10 +24,6 @@ jobs:
  
       - name: drat
         run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
-          git config --global push.default simple
-
           ## Get drat repo
           cp test_0.1.0.tar.gz ../
           cd ..
