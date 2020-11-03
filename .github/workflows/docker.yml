@@ -22,12 +22,14 @@ jobs:
           git config --global push.default simple
 
           ## Get drat repo
+          cp test_0.1.0.tar.gz ../
           cd ..
-          git remote add upstream "https://$GITHUB_TOKEN@github.com/csgillespie/drat.git"
+          git remote add upstream "https://${{ secrets.GITHUB_TOKEN }}@github.com/csgillespie/drat.git"
           git fetch --depth 1 upstream
+          cd drat
           # Rscript -e "file.remove('err.txt')"
           git checkout gh-pages
-          Rscript -e "drat::insertPackage(Sys.getenv('PKG_TARBALL_PATH'), repodir = '.', \
+          Rscript -e "drat::insertPackage('../test_0.1.0.tar.gz', repodir = '.', \
                         commit = 'GH Action')"
 
           Rscript -e "cli::cli_alert_info('Pushing to drat')"
