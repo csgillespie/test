@@ -7,35 +7,50 @@ jobs:
     container: rocker/verse
     steps:
       - uses: actions/checkout@v1
+     # - name: Cache NPM dependencies
+     # uses: actions/cache@v1
+     # with:
+     #   path: ~/.npm
+    #    key: ${{ runner.OS }}-npm-cache-${{ hashFiles('**/package-lock.json') }}
+    #    restore-keys: |
+    #      ${{ runner.OS }}-npm-cache-
 
-     
+      - name: Cache R packages
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.R_LIBS_USER }}
+          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
+          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
+
       - name: Dependences
         run: |
+          echo $R_LIBS_USER
+          echo ${{ env.R_LIBS_USER }}
           remotes::install_deps(dependencies = TRUE)
           install.packages(c("drat", "cli"))
         shell: Rscript {0}
       - name: build    
         run: R CMD build .
  
-      - name: drat
-        env: # Or as an environment variable
-           GITHUB_TOKEN: ${{ secrets.GITHUBPAT }}
-        run: |
-          ## Get drat repo
-          cp test_0.1.0.tar.gz ../
-          cd .. && mkdir drat && cd drat
-          git init
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
-          git config --global push.default simple
-          git remote add upstream "https://$GITHUB_TOKEN@github.com/csgillespie/drat.git"
-          git fetch --depth 1 upstream
-          # Rscript -e "file.remove('err.txt')"
-          git checkout gh-pages
-          Rscript -e "drat::insertPackage('../test_0.1.0.tar.gz', repodir = '.', \
-                        commit = 'GH Action')"
+      # - name: drat
+      #   env: # Or as an environment variable
+      #      GITHUB_TOKEN: ${{ secrets.GITHUBPAT }}
+      #   run: |
+      #     ## Get drat repo
+      #     cp test_0.1.0.tar.gz ../
+      #     cd .. && mkdir drat && cd drat
+      #     git init
+      #     git config --local user.email "actions@github.com"
+      #     git config --local user.name "GitHub Actions"
+      #     git config --global push.default simple
+      #     git remote add upstream "https://$GITHUB_TOKEN@github.com/csgillespie/drat.git"
+      #     git fetch --depth 1 upstream
+      #     # Rscript -e "file.remove('err.txt')"
+      #     git checkout gh-pages
+      #     Rscript -e "drat::insertPackage('../test_0.1.0.tar.gz', repodir = '.', \
+      #                   commit = 'GH Action')"
 
-          Rscript -e "cli::cli_alert_info('Pushing to drat')"
-          git push
-          cd ..
-          Rscript -e "cli::cli_alert_success('All done')"
+      #     Rscript -e "cli::cli_alert_info('Pushing to drat')"
+      #     git push
+      #     cd ..
+      #     Rscript -e "cli::cli_alert_success('All done')"
