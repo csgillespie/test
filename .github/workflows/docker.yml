@@ -28,10 +28,18 @@ jobs:
         shell: Rscript {0}
 
       - name: build    
-        run: R CMD build .
+        run: |
+          R CMD build .
+          pwd
+          ls
       - name: success
         run: echo "Success"
- 
+
+      - name: Upload output file
+        uses: actions/upload-artifact@v1
+        with:
+          name: output-log-file
+          path: ../test.file
       # - name: drat
       #   env: # Or as an environment variable
       #      GITHUB_TOKEN: ${{ secrets.GITHUBPAT }}
