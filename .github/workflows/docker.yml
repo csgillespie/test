@@ -25,7 +25,6 @@ jobs:
       - name: Dependences
         run: |
           remotes::install_deps(dependencies = TRUE)
-          install.packages(c("drat", "cli"))
         shell: Rscript {0}
 
       - name: build    
