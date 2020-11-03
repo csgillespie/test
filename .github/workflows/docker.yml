@@ -30,6 +30,8 @@ jobs:
 
       - name: build    
         run: R CMD build .
+      - name: success
+        run: echo "Success"
  
       # - name: drat
       #   env: # Or as an environment variable
