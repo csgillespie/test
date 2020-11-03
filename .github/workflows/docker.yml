@@ -18,6 +18,8 @@ jobs:
         run: R CMD build .
  
       - name: drat
+        env: # Or as an environment variable
+           GITHUB_TOKEN: ${{ secrets.GITHUBPAT }}
         run: |
           ## Get drat repo
           cp test_0.1.0.tar.gz ../
