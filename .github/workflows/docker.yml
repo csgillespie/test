@@ -1,8 +1,5 @@
 # This is a basic workflow to help you get started with Actions
-
 name: roxygen
-
-
 on: [push]
 jobs:
   job1:
@@ -10,6 +7,30 @@ jobs:
     container: rocker/verse
     steps:
       - uses: actions/checkout@v1
-      - run: Rscript -e "remotes::install_github('jumpingrivers/inteRgrate')"
-      - run: Rscript -e "inteRgrate::check_via_env(default = TRUE)"
+      - name: Dependences
+        run: |
+          remotes::install_deps(dependencies = TRUE)
+          install.packages(c("drat", "cli"))
+        shell: Rscript {0}
+      - name: build    
+        run: R CMD build .
  
+      - name: drat
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git config --global push.default simple
+
+          ## Get drat repo
+          cd ..
+          git remote add upstream "https://$GITHUB_TOKEN@github.com/csgillespie/drat.git"
+          git fetch --depth 1 upstream
+          # Rscript -e "file.remove('err.txt')"
+          git checkout gh-pages
+          Rscript -e "drat::insertPackage(Sys.getenv('PKG_TARBALL_PATH'), repodir = '.', \
+                        commit = 'GH Action')"
+
+          Rscript -e "cli::cli_alert_info('Pushing to drat')"
+          git push
+          cd ..
+          Rscript -e "cli::cli_alert_success('All done')"
