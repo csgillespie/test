@@ -23,6 +23,11 @@ jobs:
           restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
   job2:
       needs: [job1]
+      runs-on: ubuntu-latest
+      container: rocker/verse
+      steps:
+      - uses: actions/checkout@v1
+
       - name: Dependences
         run: |
           remotes::install_deps(dependencies = TRUE)
