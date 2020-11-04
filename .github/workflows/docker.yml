@@ -27,8 +27,14 @@ jobs:
       container: rocker/verse
       steps:
       - uses: actions/checkout@v1
+      - name: Cache R packages
+        uses: actions/cache@v2
+        with:
+          path: /usr/local/lib/R/site-library/
+          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
+          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
 
-      - name: Dependences
+       - name: Dependences
         run: |
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
@@ -47,6 +53,13 @@ jobs:
         with:
           name: output-log-file
           path: ../test.file
+  job3:
+      needs: [job1]
+      runs-on: ubuntu-latest
+      container: rocker/verse
+      steps:
+        - name: echo
+          run: echo "Bye"
       # - name: drat
       #   env: # Or as an environment variable
       #      GITHUB_TOKEN: ${{ secrets.GITHUBPAT }}
