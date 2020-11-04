@@ -21,7 +21,8 @@ jobs:
           path: /usr/local/lib/R/site-library/
           key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
           restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
-
+  job2:
+      needs: [job1]
       - name: Dependences
         run: |
           remotes::install_deps(dependencies = TRUE)
