@@ -10,8 +10,10 @@ jobs:
         run: |
           DES=$(sed -n -e 's/Package: //p' DESCRIPTION)_$(sed -n -e 's/Version: //p' DESCRIPTION).tar.gz
           echo $DES
-          curl --user csgillespie \
-               --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-               --data "tag_name=test"
-               --url "https://api.github.com/repos/csgillespie/test/releases"
+          curl --request POST \
+            --url "https://api.github.com/repos/csgillespie/test/releases" \
+            --user csgillespie \
+            --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            --data "tag_name=test"
+
 
