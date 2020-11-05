@@ -3,7 +3,7 @@ name: roxygen
 on: [push]
 jobs:
   example:
-    runs-on: alpine
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
       - name: List files
