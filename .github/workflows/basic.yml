@@ -10,5 +10,8 @@ jobs:
         run: |
           DES=$(sed -n -e 's/Package: //p' DESCRIPTION)_$(sed -n -e 's/Version: //p' DESCRIPTION).tar.gz
           echo $DES
-          curl --user csgillespie --header "Accept: application/vnd.github.manifold-preview" --data "tag_name=test"  "https://api.github.com/repos/csgillespie/test/releases"
+          curl --user csgillespie \
+               --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+               --data "tag_name=test"
+               --url "https://api.github.com/repos/csgillespie/test/releases"
 

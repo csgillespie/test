@@ -1,73 +1,73 @@
-# This is a basic workflow to help you get started with Actions
-name: roxygen
-on: [push]
-jobs:
-  job1:
-    runs-on: ubuntu-latest
-    container: rocker/verse
-    steps:
-      - uses: actions/checkout@v1
-      - name: Cache R packages
-        uses: actions/cache@v2
-        with:
-          path: /usr/local/lib/R/site-library/
-          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
-          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
-  job2:
-      needs: [job1]
-      runs-on: ubuntu-latest
-      container: rocker/verse
-      steps:
-        - uses: actions/checkout@v1
-        - name: Cache R packages
-          uses: actions/cache@v2
-          with:
-            path: /usr/local/lib/R/site-library/
-            key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
-            restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
-        - name: Dependences
-          run: |
-            remotes::install_deps(dependencies = TRUE)
-          shell: Rscript {0}
-
-        - name: build    
-          run: |
-            R CMD build .
-            echo $GITHUB_WORKSPACE
-        - name: success
-          run: echo "Success"
-
-#      - name: Upload output file
-#        uses: actions/upload-artifact@v1
-#        with:
-#          name: output-log-file
-#          path: ../test.file
-  job3:
-      needs: [job1]
-      runs-on: ubuntu-latest
-      container: rocker/verse
-      steps:
-        - name: echo
-          run: echo "Bye"
-      # - name: drat
-      #   env: # Or as an environment variable
-      #      GITHUB_TOKEN: ${{ secrets.GITHUBPAT }}
-      #   run: |
-      #     ## Get drat repo
-      #     cp test_0.1.0.tar.gz ../
-      #     cd .. && mkdir drat && cd drat
-      #     git init
-      #     git config --local user.email "actions@github.com"
-      #     git config --local user.name "GitHub Actions"
-      #     git config --global push.default simple
-      #     git remote add upstream "https://$GITHUB_TOKEN@github.com/csgillespie/drat.git"
-      #     git fetch --depth 1 upstream
-      #     # Rscript -e "file.remove('err.txt')"
-      #     git checkout gh-pages
-      #     Rscript -e "drat::insertPackage('../test_0.1.0.tar.gz', repodir = '.', \
-      #                   commit = 'GH Action')"
-
-      #     Rscript -e "cli::cli_alert_info('Pushing to drat')"
-      #     git push
-      #     cd ..
-      #     Rscript -e "cli::cli_alert_success('All done')"
+# # This is a basic workflow to help you get started with Actions
+# name: roxygen
+# on: [push]
+# jobs:
+#   job1:
+#     runs-on: ubuntu-latest
+#     container: rocker/verse
+#     steps:
+#       - uses: actions/checkout@v1
+#       - name: Cache R packages
+#         uses: actions/cache@v2
+#         with:
+#           path: /usr/local/lib/R/site-library/
+#           key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
+#           restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
+#   job2:
+#       needs: [job1]
+#       runs-on: ubuntu-latest
+#       container: rocker/verse
+#       steps:
+#         - uses: actions/checkout@v1
+#         - name: Cache R packages
+#           uses: actions/cache@v2
+#           with:
+#             path: /usr/local/lib/R/site-library/
+#             key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
+#             restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
+#         - name: Dependences
+#           run: |
+#             remotes::install_deps(dependencies = TRUE)
+#           shell: Rscript {0}
+#
+#         - name: build
+#           run: |
+#             R CMD build .
+#             echo $GITHUB_WORKSPACE
+#         - name: success
+#           run: echo "Success"
+#
+# #      - name: Upload output file
+# #        uses: actions/upload-artifact@v1
+# #        with:
+# #          name: output-log-file
+# #          path: ../test.file
+#   job3:
+#       needs: [job1]
+#       runs-on: ubuntu-latest
+#       container: rocker/verse
+#       steps:
+#         - name: echo
+#           run: echo "Bye"
+#       # - name: drat
+#       #   env: # Or as an environment variable
+#       #      GITHUB_TOKEN: ${{ secrets.GITHUBPAT }}
+#       #   run: |
+#       #     ## Get drat repo
+#       #     cp test_0.1.0.tar.gz ../
+#       #     cd .. && mkdir drat && cd drat
+#       #     git init
+#       #     git config --local user.email "actions@github.com"
+#       #     git config --local user.name "GitHub Actions"
+#       #     git config --global push.default simple
+#       #     git remote add upstream "https://$GITHUB_TOKEN@github.com/csgillespie/drat.git"
+#       #     git fetch --depth 1 upstream
+#       #     # Rscript -e "file.remove('err.txt')"
+#       #     git checkout gh-pages
+#       #     Rscript -e "drat::insertPackage('../test_0.1.0.tar.gz', repodir = '.', \
+#       #                   commit = 'GH Action')"
+#
+#       #     Rscript -e "cli::cli_alert_info('Pushing to drat')"
+#       #     git push
+#       #     cd ..
+#       #     Rscript -e "cli::cli_alert_success('All done')"
